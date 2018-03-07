@@ -17,14 +17,13 @@
 		return;
 	}
 
-	var style =
-		'<style>' +
-			'.lhd-table { display: table; margin: 0; padding: 0; }' +
-			'.lhd-row { display: table-row; margin: 0; padding: 0; }' +
-			'.lhd-cell { display: table-cell; margin: 0; }' +
-			'.lhd-cell-title { font-weight: bold; padding: 0 10px 0 0; text-align: right; }' +
-			'.lhd-cell-value { text-align: left; }' +
-		'</style>';
+	var style =	`<style>
+	.lhd-table { display: table; margin: 0; padding: 0; }
+	.lhd-row { display: table-row; margin: 0; padding: 0; }
+	.lhd-cell { display: table-cell; margin: 0; }
+	.lhd-cell-title { font-weight: bold; padding: 0 10px 0 0; text-align: right; }
+	.lhd-cell-value { text-align: left; }
+</style>`;
 
 	$('head').append(style);
 
