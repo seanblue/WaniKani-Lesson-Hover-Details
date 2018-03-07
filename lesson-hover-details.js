@@ -9,7 +9,7 @@
 // ==/UserScript==
 
 (function() {
-    'use strict';
+	'use strict';
 
 	if (!window.wkof) {
 		alert('WaniKani Lesson Hover Details script requires WaniKani Open Framework.\nYou will now be forwarded to installation instructions.');
@@ -19,16 +19,16 @@
 
 	var style =
 		'<style>' +
-			'.table { display: table; margin: 0; padding: 0; }' +
-			'.row { display: table-row; margin: 0; padding: 0; }' +
-			'.cell { display: table-cell; margin: 0; }' +
-			'.cell-title { font-weight: bold; padding: 0 10px 0 0; text-align: right; }' +
-			'.cell-value { text-align: left; }' +
+			'.lhd-table { display: table; margin: 0; padding: 0; }' +
+			'.lhd-row { display: table-row; margin: 0; padding: 0; }' +
+			'.lhd-cell { display: table-cell; margin: 0; }' +
+			'.lhd-cell-title { font-weight: bold; padding: 0 10px 0 0; text-align: right; }' +
+			'.lhd-cell-value { text-align: left; }' +
 		'</style>';
 
 	$('head').append(style);
 
-    wkof.include('Apiv2, ItemData');
+	wkof.include('Apiv2, ItemData');
 	wkof.ready('Apiv2, ItemData').then(fetchData);
 
 	function fetchData() {
@@ -79,18 +79,18 @@
 	}
 
 	function getPopoverHtml(lessonCounts) {
-		return `<div class="table">
-	<div class="row">
-    	<div class="cell cell-title">Radicals</div>
-    	<div class="cell cell-value">${lessonCounts.radical}</div>
+		return `<div class="lhd-table">
+	<div class="lhd-row">
+		<div class="lhd-cell lhd-cell-title">Radicals</div>
+		<div class="lhd-cell lhd-cell-value">${lessonCounts.radical}</div>
 	</div>
-	<div class="row">
-		<div class="cell cell-title">Kanji</div>
-    	<div class="cell cell-value">${lessonCounts.kanji}</div>
+	<div class="lhd-row">
+		<div class="lhd-cell lhd-cell-title">Kanji</div>
+		<div class="lhd-cell lhd-cell-value">${lessonCounts.kanji}</div>
 	</div>
-	<div class="row">
-		<div class="cell cell-title">Vocab</div>
-    	<div class="cell cell-value">${lessonCounts.vocabulary}</div>
+	<div class="lhd-row">
+		<div class="lhd-cell lhd-cell-title">Vocab</div>
+		<div class="lhd-cell lhd-cell-value">${lessonCounts.vocabulary}</div>
 	</div>
 </div>`;
 	}
