@@ -3,7 +3,7 @@
 // @namespace     https://www.wanikani.com
 // @description   Show lesson breakdown by type on hover
 // @author        seanblue
-// @version       1.0.1
+// @version       1.0.2
 // @include       *://www.wanikani.com/*
 // @grant         none
 // ==/UserScript==
@@ -31,8 +31,8 @@
 
 	$('head').append(style);
 
-	wkof.include('Apiv2, ItemData');
-	wkof.ready('Apiv2, ItemData').then(fetchData);
+	wkof.include('Apiv2');
+	wkof.ready('Apiv2').then(fetchData);
 
 	function fetchData() {
 		var promises = [];
