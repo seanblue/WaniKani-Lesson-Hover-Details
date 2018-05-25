@@ -12,8 +12,12 @@
 	'use strict';
 
 	if (!window.wkof) {
-		alert('WaniKani Lesson Hover Details script requires WaniKani Open Framework.\nYou will now be forwarded to installation instructions.');
-		window.location.href = 'https://community.wanikani.com/t/instructions-installing-wanikani-open-framework/28549';
+		var response = confirm('WaniKani Lesson Hover Details script requires WaniKani Open Framework.\n Click "OK" to be forwarded to installation instructions.');
+
+		if (response) {
+			window.location.href = 'https://community.wanikani.com/t/instructions-installing-wanikani-open-framework/28549';
+		}
+
 		return;
 	}
 
