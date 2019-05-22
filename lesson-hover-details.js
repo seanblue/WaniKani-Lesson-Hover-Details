@@ -3,7 +3,7 @@
 // @namespace     https://www.wanikani.com
 // @description   Show lesson breakdown by type on hover
 // @author        seanblue
-// @version       1.0.2
+// @version       1.0.3
 // @include       *://www.wanikani.com/*
 // @grant         none
 // ==/UserScript==
