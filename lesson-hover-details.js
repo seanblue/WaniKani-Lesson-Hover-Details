@@ -68,7 +68,7 @@
 	}
 
 	function setupPopover(lessonCounts) {
-		var lessonMenuItem = $('.navbar .lessons a');
+		var lessonMenuItem = $('.navigation .sitemap__page--lessons a');
 		if (lessonMenuItem.length === 0)
 			return;
 
