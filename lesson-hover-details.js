@@ -3,7 +3,7 @@
 // @namespace     https://www.wanikani.com
 // @description   Show lesson breakdown by type on hover
 // @author        seanblue
-// @version       1.0.3
+// @version       1.0.4
 // @include       *://www.wanikani.com/*
 // @grant         none
 // ==/UserScript==
@@ -20,6 +20,8 @@
 
 		return;
 	}
+
+	var lessonMenuItemSelector = '.navigation .navigation-shortcut--lessons a';
 
 	var style = `<style>
 	.lhd-table { display: table; margin: 0; padding: 0; }
@@ -68,7 +70,7 @@
 	}
 
 	function setupPopover(lessonCounts) {
-		var lessonMenuItem = $('.navigation .sitemap__page--lessons a');
+		var lessonMenuItem = $(lessonMenuItemSelector);
 		if (lessonMenuItem.length === 0)
 			return;
 
