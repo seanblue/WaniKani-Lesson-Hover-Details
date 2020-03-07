@@ -3,15 +3,15 @@
 // @namespace     https://www.wanikani.com
 // @description   Show lesson breakdown by type on hover
 // @author        seanblue
-// @version       1.0.4
-// @include       *://www.wanikani.com/*
+// @version       1.1.0
+// @include       https://www.wanikani.com/*
 // @grant         none
 // ==/UserScript==
 
-(function() {
+(function(wkof, $) {
 	'use strict';
 
-	if (!window.wkof) {
+	if (!wkof) {
 		var response = confirm('WaniKani Lesson Hover Details script requires WaniKani Open Framework.\n Click "OK" to be forwarded to installation instructions.');
 
 		if (response) {
@@ -21,9 +21,20 @@
 		return;
 	}
 
-	var lessonMenuItemSelector = '.navigation .navigation-shortcut--lessons a';
+	const lessonMenuItemSelector = '.navigation .navigation-shortcut--lessons a';
+	const lessonDashboardItemSelector = 'a.lessons-and-reviews__lessons-button';
 
-	var style = `<style>
+    const popoverTemplate = '<div class="popover review-time"><div class="arrow"></div><div class="popover-inner"><div class="popover-content"><p></p></div></div></div>';
+
+    const popoverConfig = {
+        html: true,
+        animation: false,
+        placement: 'bottom',
+        trigger: 'hover',
+        template: popoverTemplate
+    };
+
+	const style = `<style>
 	.lhd-table { display: table; margin: 0; padding: 0; }
 	.lhd-row { display: table-row; margin: 0; padding: 0; }
 	.lhd-cell { display: table-cell; margin: 0; font-size: 0.875rem; }
@@ -37,7 +48,7 @@
 	wkof.ready('Apiv2').then(fetchData);
 
 	function fetchData() {
-		var promises = [];
+		let promises = [];
 		promises.push(wkof.Apiv2.get_endpoint('summary'));
 		promises.push(wkof.Apiv2.get_endpoint('subjects'));
 
@@ -45,42 +56,47 @@
 	}
 
 	function processData(results) {
-		var lessonCounts = getLessonCount(results);
-		setupPopover(lessonCounts);
+		let lessonCounts = getLessonCount(results);
+		setupMenuPopover(lessonCounts);
+		setupDashboardPopover(lessonCounts);
 	}
 
 	function getLessonCount(results) {
-		var summary = results[0];
-		var subjects = results[1];
+		let summary = results[0];
+		let subjects = results[1];
 
-		var lessonCounts = {
+		let lessonCounts = {
 			radical: 0,
 			kanji: 0,
 			vocabulary: 0
 		};
 
 		// Pull the list of subject_ids from the lesson list in 'summary'.
-		var lessonSubjectIds = summary.lessons[0].subject_ids;
+		let lessonSubjectIds = summary.lessons[0].subject_ids;
 		lessonSubjectIds.forEach(function(subjectId) {
-			var item = subjects[subjectId];
+			let item = subjects[subjectId];
 			lessonCounts[item.object]++;
 		});
 
 		return lessonCounts;
 	}
 
-	function setupPopover(lessonCounts) {
-		var lessonMenuItem = $(lessonMenuItemSelector);
-		if (lessonMenuItem.length === 0)
+	function setupMenuPopover(lessonCounts) {
+		let lessonMenuItem = $(lessonMenuItemSelector);
+		if (lessonMenuItem.length === 0) {
 			return;
+        }
 
-		lessonMenuItem.attr('data-content', getPopoverHtml(lessonCounts)).popover({
-			html: true,
-			animation: false,
-			placement: 'bottom',
-			trigger: 'hover',
-			template: '<div class="popover review-time"><div class="arrow"></div><div class="popover-inner"><div class="popover-content"><p></p></div></div></div>'
-		});
+		lessonMenuItem.attr('data-content', getPopoverHtml(lessonCounts)).popover(popoverConfig);
+	}
+
+	function setupDashboardPopover(lessonCounts) {
+		let lessonDashboardItem = $(lessonDashboardItemSelector);
+		if (lessonDashboardItem.length === 0) {
+			return;
+        }
+
+		lessonDashboardItem.attr('data-content', getPopoverHtml(lessonCounts)).popover(popoverConfig);
 	}
 
 	function getPopoverHtml(lessonCounts) {
@@ -99,4 +115,4 @@
 	</div>
 </div>`;
 	}
-})();
+})(window.wkof, window.jQuery);
