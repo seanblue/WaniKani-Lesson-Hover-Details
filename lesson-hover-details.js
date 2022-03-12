@@ -38,8 +38,8 @@
 	.lhd-table { display: table; margin: 0; padding: 0; }
 	.lhd-row { display: table-row; margin: 0; padding: 0; }
 	.lhd-cell { display: table-cell; margin: 0; font-size: 0.875rem; }
-	.lhd-cell-title { font-weight: bold; padding: 0 10px 0 0; text-align: right; }
-	.lhd-cell-value { text-align: left; }
+	.lhd-cell-title { font-weight: bold; padding: 0 5px 0 0; text-align: right; }
+	.lhd-cell-value { padding: 0 0 0 5px; text-align: left; }
 </style>`;
 
 	$('head').append(style);
@@ -49,6 +49,7 @@
 
 	function fetchData() {
 		let promises = [];
+		promises.push(wkof.Apiv2.get_endpoint('user'));
 		promises.push(wkof.Apiv2.get_endpoint('summary'));
 		promises.push(wkof.Apiv2.get_endpoint('subjects'));
 
@@ -62,13 +63,19 @@
 	}
 
 	function getLessonCount(results) {
-		let summary = results[0];
-		let subjects = results[1];
+		let currentLevel = results[0].level;
+		let summary = results[1];
+		let subjects = results[2];
 
 		let lessonCounts = {
 			radical: 0,
 			kanji: 0,
-			vocabulary: 0
+			vocabulary: 0,
+			currentLevel : {
+				radical: 0,
+				kanji: 0,
+				vocabulary: 0
+			}
 		};
 
 		// Pull the list of subject_ids from the lesson list in 'summary'.
@@ -76,6 +83,10 @@
 		lessonSubjectIds.forEach(function(subjectId) {
 			let item = subjects[subjectId];
 			lessonCounts[item.object]++;
+
+			if (item.data.level === currentLevel) {
+				lessonCounts.currentLevel[item.object]++;
+			}
 		});
 
 		return lessonCounts;
@@ -104,14 +115,17 @@
 	<div class="lhd-row">
 		<div class="lhd-cell lhd-cell-title">Radicals</div>
 		<div class="lhd-cell lhd-cell-value">${lessonCounts.radical}</div>
+		<div class="lhd-cell lhd-cell-value">(${lessonCounts.currentLevel.radical} current level)</div>
 	</div>
 	<div class="lhd-row">
 		<div class="lhd-cell lhd-cell-title">Kanji</div>
 		<div class="lhd-cell lhd-cell-value">${lessonCounts.kanji}</div>
+		<div class="lhd-cell lhd-cell-value">(${lessonCounts.currentLevel.kanji} current level)</div>
 	</div>
 	<div class="lhd-row">
 		<div class="lhd-cell lhd-cell-title">Vocab</div>
 		<div class="lhd-cell lhd-cell-value">${lessonCounts.vocabulary}</div>
+		<div class="lhd-cell lhd-cell-value">(${lessonCounts.currentLevel.vocabulary} current level)</div>
 	</div>
 </div>`;
 	}
