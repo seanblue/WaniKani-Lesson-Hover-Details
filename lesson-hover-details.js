@@ -21,6 +21,15 @@
 		return;
 	}
 
+	const levelSettingOptions = {
+		None: 0,
+		CurrentLevel: 1,
+		PriorLevels: 2
+	};
+
+	// USER SETTING: Change this to display current level data, prior level data, or no level data in parentheses. Use one of the options from "levelSettingOptions".
+	const levelSetting = levelSettingOptions.CurrentLevel;
+
 	const lessonMenuItemSelector = '.navigation .navigation-shortcut--lessons a';
 	const lessonDashboardItemSelector = 'a.lessons-and-reviews__lessons-button';
 
@@ -112,21 +121,29 @@
 
 	function getPopoverHtml(lessonCounts) {
 		return `<div class="lhd-table">
-	<div class="lhd-row">
-		<div class="lhd-cell lhd-cell-title">Radicals</div>
-		<div class="lhd-cell lhd-cell-value">${lessonCounts.radical}</div>
-		<div class="lhd-cell lhd-cell-value">(${lessonCounts.currentLevel.radical} current level)</div>
-	</div>
-	<div class="lhd-row">
-		<div class="lhd-cell lhd-cell-title">Kanji</div>
-		<div class="lhd-cell lhd-cell-value">${lessonCounts.kanji}</div>
-		<div class="lhd-cell lhd-cell-value">(${lessonCounts.currentLevel.kanji} current level)</div>
-	</div>
-	<div class="lhd-row">
-		<div class="lhd-cell lhd-cell-title">Vocab</div>
-		<div class="lhd-cell lhd-cell-value">${lessonCounts.vocabulary}</div>
-		<div class="lhd-cell lhd-cell-value">(${lessonCounts.currentLevel.vocabulary} current level)</div>
-	</div>
+	${getPopoverSectionHtml(lessonCounts, 'Radicals', 'radical')}
+	${getPopoverSectionHtml(lessonCounts, 'Kanji', 'kanji')}
+	${getPopoverSectionHtml(lessonCounts, 'Vocab', 'vocabulary')}
 </div>`;
+	}
+
+	function getPopoverSectionHtml(lessonCounts, sectionHeader, sectionKey) {
+		let rowOpen = '<div class="lhd-row">';
+
+		let headerCell = `<div class="lhd-cell lhd-cell-title">${sectionHeader}</div>`;
+		let lessonCountCell = `<div class="lhd-cell lhd-cell-value">${lessonCounts[sectionKey]}</div>`;
+
+		let lessonLevelCountCell = '';
+
+		if (levelSetting === levelSettingOptions.CurrentLevel) {
+			lessonLevelCountCell = `<div class="lhd-cell lhd-cell-value">(${lessonCounts.currentLevel[sectionKey]} current level)</div>`;
+		}
+		else if (levelSetting === levelSettingOptions.PriorLevels) {
+			lessonLevelCountCell = `<div class="lhd-cell lhd-cell-value">(${lessonCounts[sectionKey] - lessonCounts.currentLevel[sectionKey]} prior levels)</div>`;
+		}
+
+		let rowClose = '</div>';
+
+		return `${rowOpen}${headerCell}${lessonCountCell}${lessonLevelCountCell}${rowClose}`;
 	}
 })(window.wkof, window.jQuery);
