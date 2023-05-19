@@ -3,7 +3,7 @@
 // @namespace     https://www.wanikani.com
 // @description   Show lesson breakdown by type on hover
 // @author        seanblue
-// @version       1.2.0
+// @version       1.2.1
 // @include       https://www.wanikani.com/*
 // @grant         none
 // ==/UserScript==
@@ -44,6 +44,7 @@
     };
 
 	const style = `<style>
+	.popover { width: auto; }
 	.lhd-table { display: table; margin: 0; padding: 0; }
 	.lhd-row { display: table-row; margin: 0; padding: 0; }
 	.lhd-cell { display: table-cell; margin: 0; font-size: 0.875rem; }
@@ -80,10 +81,12 @@
 			radical: 0,
 			kanji: 0,
 			vocabulary: 0,
+			kana_vocabulary: 0,
 			currentLevel : {
 				radical: 0,
 				kanji: 0,
-				vocabulary: 0
+				vocabulary: 0,
+				kana_vocabulary: 0
 			}
 		};
 
@@ -124,6 +127,7 @@
 	${getPopoverSectionHtml(lessonCounts, 'Radicals', 'radical')}
 	${getPopoverSectionHtml(lessonCounts, 'Kanji', 'kanji')}
 	${getPopoverSectionHtml(lessonCounts, 'Vocab', 'vocabulary')}
+	${getPopoverSectionHtml(lessonCounts, 'Kana Vocab', 'kana_vocabulary')}
 </div>`;
 	}
 
